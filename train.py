@@ -1,13 +1,13 @@
 
 import torch.optim
+import random
 import os 
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 from torchvision import datasets, transforms
-import sys
-import numpy
 import matplotlib.pyplot as plt
-
+from pathlib import Path
+from DNN_MODEL.model import BASIC_MODEL
 
 """
 
@@ -62,6 +62,10 @@ for epoch in range(EPOCHS):
 
 def main():
 
+
+    
+
+
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(device)
 
@@ -69,18 +73,9 @@ def main():
     LR = 0.005
     EPOCHS = 150
 
-    class BASIC_MODEL(nn.Module):
-        def __init__(self):
-            super().__init__()
+    
 
-            self.layers = nn.Sequential(nn.Linear(28*28, 512),  nn.ReLU(inplace = True), nn.Dropout(0.2),  
-                                        nn.Linear(512, 30), nn.ReLU(inplace = True), nn.Dropout(0.2),
-                                        nn.Linear(30,10))
-
-        def forward(self, x) -> torch.Tensor:
-            return self.layers(x)
-
-    model = BASIC_MODEL().to(device)
+    model = BASIC_MODEL().to(torch.device(device))
 
     criterion = nn.CrossEntropyLoss()
 
@@ -91,17 +86,23 @@ def main():
 
     MNIST_Train = datasets.MNIST(root = "data", train= True,  transform = transform)
 
-    MNIST_Test = datasets.MNIST(root = "data", train = False, transform = transform )
+    
 
 
     train_data_loader = DataLoader(dataset = MNIST_Train, batch_size= BATCH, shuffle = True, num_workers = 0)
 
-    #test_data_loader = DataLoader(dataset = MNIST_Test, batch_size = 1000, num_workers = 2)
+    
+
+
+    
 
     print(f"num_parameters: {sum(p.numel() for p in model.parameters())}")
 
 
-    for epoch in range(EPOCHS):
+
+    
+
+    for epoch in range(EPOCHS//25):
 
         model.train()
         
@@ -137,6 +138,51 @@ def main():
         
         
         print(f"Epoch: {epoch}, Loss: {train_loss/len(train_data_loader):.4f}")
+
+    images, labels = next(iter(train_data_loader))
+
+    rand_ind_start = random.randint(0, 31)
+
+
+    image = images[rand_ind_start,...].squeeze()
+
+    plt.imshow(image)
+
+    plt.show()
+
+    model_path = Path("checkpoint") /"model.pth"
+
+    optimizer_path = Path("checkpoint") /"optimizer.pth"
+
+    Path.touch(model_path)
+
+    Path.touch(optimizer_path)
+
+    torch.save(model.state_dict(), model_path)
+
+    torch.save(optimizer.state_dict(), optimizer_path)
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+    
+
+    
+
+    
+    
+
+
 
 
 if __name__ == "__main__":
