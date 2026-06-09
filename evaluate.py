@@ -35,7 +35,9 @@ def main():
 
             image, label = image.to(device), label.to(device)
 
-            output = model(image.view(image.shape[0], -1))
+            #output = model(image.view(image.shape[0], -1))
+
+            output = model(image)
 
             loss = criterion(output,label)
 
