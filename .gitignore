@@ -1,0 +1,5 @@
+data/MNIST/PetImages/Cat/*.jpg
+data/MNIST/PetImages/Cat/*.jpg
+Models/_pycache_/*.pyc   
+
+
