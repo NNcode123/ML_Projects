@@ -3,7 +3,10 @@ import torch.nn as nn
 from pathlib import Path
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-from DNN_MODEL.model import BASIC_MODEL
+from Models.model import BASIC_MODEL
+
+
+
 
 
 def main():

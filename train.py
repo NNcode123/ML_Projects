@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import datasets, transforms
 import matplotlib.pyplot as plt
 from pathlib import Path
-from DNN_MODEL.model import BASIC_MODEL
-from DNN_MODEL.model import BASIC_CNN
+from Models.model import BASIC_MODEL
+from Models.model import BASIC_CNN
 
 """
 
@@ -81,7 +81,7 @@ def main():
 
     def train_results(BATCH, LR, EPOCHS):
 
-        model = BASIC_CNN().to(torch.device(device))
+        model = BASIC_MODEL().to(torch.device(device))
 
         criterion = nn.CrossEntropyLoss()
 
@@ -122,9 +122,9 @@ def main():
 
                 image, label = image.to(device), label.to(device)
 
-                #output = model(image.view(image.shape[0],-1))
+                output = model(image.view(image.shape[0],-1))
 
-                output = model(image)
+                #output = model(image)
 
             
             # print(f"Predicted_Class_shape: {output.shape}, Actual_Class_shape: {label.shape} ")
@@ -158,9 +158,11 @@ def main():
 
         plt.show()
 
-        model_path = Path("checkpoint") /"model.pth"
+        model_path = Path("checkpoint") /"dnn_model.pth"
 
-        optimizer_path = Path("checkpoint") /"optimizer.pth"
+        Parent_Dir = Path.resolve(__file__).parent().resolve
+
+        optimizer_path = Path("checkpoint") /"dnn_optimizer.pth"
 
         Path.touch(model_path)
 
