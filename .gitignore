@@ -1,5 +1,11 @@
-data/MNIST/PetImages/Cat/*.jpg
-data/MNIST/PetImages/Cat/*.jpg
-Models/_pycache_/*.pyc   
+#Datasets
+data/
+
+#Model Checkpoints
+checkpoint/cnn
+
+
+#Model cache data
+Models/__pycache__/*.pyc
 
 
