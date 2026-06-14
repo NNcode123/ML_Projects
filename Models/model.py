@@ -99,7 +99,6 @@ class CNN_CAT_DOG(nn.Module):
           return self.features(x)
      
 
-
 """
                                         
                                         """
