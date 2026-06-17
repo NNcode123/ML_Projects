@@ -33,11 +33,6 @@ train_data, val_data = data.random_split(train_data, [int(len(train_data)*0.8), 
 
 def main():
 
-   
-              
-
-   
-
     train_data = datasets.ImageFolder(root = "data\\PetImages", transform = transform)
 
     print(train_data.class_to_idx)
@@ -46,9 +41,8 @@ def main():
 
     
 
-    val_loader = data.DataLoader(dataset = val_data, batch_size = Batch, shuffle = True, num_workers = 0  )
 
-    def train_validation(EPOCH, LR, Batch):
+    def train(EPOCH, LR, Batch):
 
         model = CNN_CAT_DOG().to(torch.device('cuda'))
 
@@ -59,17 +53,6 @@ def main():
         optimizer = optim.Adam(params = model.parameters(), lr = LR )
 
         criterion = nn.CrossEntropyLoss()
-
-       
-
-
-
-            
-
-
-
-        
-
         
 
 
@@ -79,18 +62,11 @@ def main():
 
             model.train()
             
-            for ind,(image, label) in enumerate(train_loader):
+            for (image, label) in enumerate(train_loader):
 
                 image, label = image.to('cuda'), label.to('cuda')
 
                 output = model(image)
-
-
-                """
-                if (ind <= 3):
-                    print(f"Output:\n {output}\n\n")
-                    print(f"Predicted: \n\n {output.detach().argmax(axis = 1)} \n\n")
-                """
 
                 loss = criterion(output, label)
 
@@ -108,29 +84,16 @@ def main():
 
                 total_loss += loss.item()
 
-                #print(f"Accuracy: {accuracy/ label.numel()}")
+            print(f"Val_accuracy {total_acc/len(train_loader):.4f}, Val_Loss: {total_loss/len(train_loader)}")
+        
+        
 
-            path: Path = Path("checkpoint") / "cnn"  #/("model_epoch_"+str(epoch)+".pth"))
-            path.mkdir(parents = True, exist_ok = True)
-            path_1 = Path("checkpoint")/"cnn" #/("optim_epoch_"+str(epoch)+".pth"))
-            path_1.mkdir(parents = True, exist_ok = True)
-            path = path / ("model_epoch_"+str(epoch)+".pth")
-            path_1 = path_1 /("optim_epoch_"+str(epoch)+".pth")
-            path.touch(exist_ok = True)
-            path_1.touch(exist_ok = True)
-            torch.save(model.state_dict(), path)
-            torch.save(optimizer.state_dict(),path_1)
-
-
-                
-                
-            print(f"Total_accuracy {total_acc/len(train_loader):.4f}, Loss: {total_loss/len(train_loader)}")
 
         
 
 
 
-    train_validation(10,0.01, 32)
+    train(10,0.01, 32)
 
 
 
