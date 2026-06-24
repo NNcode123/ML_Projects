@@ -6,6 +6,7 @@ import random
 from training.cnn_train import transform
 from PIL import Image 
 from utils.parent_dir import parent_dir
+from utils.device import device
 from pathlib import Path
 import os 
 import matplotlib.pyplot as plt
@@ -13,9 +14,12 @@ import matplotlib.pyplot as plt
 # Visualization script for CNN feature maps and Grad-CAM style overlays.
 # Uses a trained CNN model to inspect intermediate feature responses.
 
-model = CNN_CAT_DOG().to(torch.device('cuda'))
+model = CNN_CAT_DOG().to(device)
 
-model.load_state_dict(torch.load(os.path.join("checkpoint","cnn","model_epoch_9.pth")))
+
+model_state_dict =  torch.load(os.path.join("checkpoint","cnn","saved_cnn_model.pth"))
+model.load_state_dict(model_state_dict["model"])
+
 
 # Print a summary placeholder for the model parameter count
 print(f"Total_params:sum(param.numel() for param in model.parameters())")

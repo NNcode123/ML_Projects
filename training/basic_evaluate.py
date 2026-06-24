@@ -16,7 +16,7 @@ def main():
     model = BASIC_MODEL()
 
     # Load the trained model weights from checkpoint
-    model.load_state_dict(torch.load(parent_dir /"checkpoint" / "basic" / "dnn_model.pth"))
+    model.load_state_dict(torch.load(parent_dir /"checkpoint" / "basic" / "saved_dnn_model.pth")["model"])
 
     model.to(device)
 

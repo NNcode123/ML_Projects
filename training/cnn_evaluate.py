@@ -13,7 +13,8 @@ def main():
     model = CNN_CAT_DOG().to(device)
 
     # Load the trained checkpoint for evaluation
-    model.load_state_dict(torch.load(os.path.join("checkpoint","cnn","model_epoch_9.pth")))
+    model_state_dict =  torch.load(os.path.join("checkpoint","cnn","saved_cnn_model.pth"))
+    model.load_state_dict(model_state_dict["model"])
 
     # Use the validation split from cnn_train.py for evaluation
     val_loader = DataLoader(dataset = val_data, batch_size = 64, shuffle  = True, num_workers = 0)

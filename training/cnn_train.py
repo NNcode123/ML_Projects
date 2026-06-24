@@ -10,6 +10,7 @@ import PIL
 from utils.metrics import calc_accuracy
 from utils.device import device
 from utils.parent_dir import parent_dir
+from utils.train_funcs import train_results
 from pathlib import Path
 
 import os
@@ -47,80 +48,9 @@ train_data, val_data = data.random_split(train_data, [int(len(train_data)*0.8), 
 
 def main():
 
-    def train(EPOCH, LR, Batch):
+    train_results(64,0.001,10, CNN_CAT_DOG(), train_data, None, parent_dir / "checkpoint" / "cnn" / "saved_cnn_model.pth")
 
-        # Initialize the CNN model and data loader for training
-        model = CNN_CAT_DOG().to(device)
-
-
-        train_loader = data.DataLoader(dataset = train_data, batch_size = Batch, shuffle = True, num_workers = 0)
-        
-
-        optimizer = optim.Adam(params = model.parameters(), lr = LR )
-
-        criterion = nn.CrossEntropyLoss()
-        
-
-
-        # Training loop for the cat/dog CNN model
-        for epoch in range(EPOCH):
-
-            total_loss, total_acc, sample_tot = 0,0, 0
-
-            model.train()
-            
-            for (image, label) in train_loader:
-
-                image, label = image.to(device), label.to(device)
-
-                output = model(image)
-
-                loss = criterion(output, label)
-
-                optimizer.zero_grad()
-
-                loss.backward()
-
-                optimizer.step()
-
-                accuracy = calc_accuracy(output, label)
-
-                total_acc += accuracy
-
-                sample_tot += label.numel()
-
-                total_loss += loss.item()
-
-            print(f"Epoch: {epoch}, train_accuracy {total_acc/len(train_loader):.4f}, train_Loss: {total_loss/len(train_loader)}")
-        
-        
-
-
-        
-
-
-
-    train(10,0.01, 32)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 if __name__ == "__main__":
