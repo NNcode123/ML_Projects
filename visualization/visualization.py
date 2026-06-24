@@ -5,6 +5,7 @@ import torch
 import random
 from training.cnn_train import transform
 from PIL import Image 
+from utils.parent_dir import parent_dir
 from pathlib import Path
 import os 
 import matplotlib.pyplot as plt
@@ -23,7 +24,7 @@ cat_image, dog_image = transform(Image.open(os.path.join("data","PetImages","Cat
 
 
 
-def feature_map(image: torch.tensor, model: nn.Module)->torch.Tensor:
+def feature_map(image: torch.Tensor, model: nn.Module)->torch.Tensor:
     image = image.unsqueeze(0).to('cuda')
     with torch.no_grad():
         map = image
@@ -91,7 +92,7 @@ def overlay(heatmap: torch.Tensor, image: torch.Tensor, alpha: float = 0.7):
     
 
 
-fig_1, axs_1 = plt.subplots(nrows = 2, ncols = 8)
+fig_1, axs_1 = plt.subplots(nrows = 2, ncols = 8, figsize = (40,15))
 
 cat_features = feature_map(cat_image, model).squeeze()
 
@@ -106,12 +107,12 @@ for ind in range(16):
     axs_1[ind//8, ind%8].axis("off")
 
 fig_1.suptitle("Cat Feature Maps", fontsize = 16)
-fig_1.savefig("Images\\features.png")
+fig_1.savefig(parent_dir / "Image_Visualization" /"features.png")
 
 
 
 
-fig_2, axs_2 = plt.subplots(nrows = 1, ncols =2, figsize = (10,8))
+fig_2, axs_2 = plt.subplots(nrows = 1, ncols =2, figsize = (20,8))
 axs_2[0].imshow(cat_image.permute(1,2,0))
 axs_2[0].set_title("Original Image")
 axs_2[0].axis("off")
@@ -119,7 +120,7 @@ axs_2[1].imshow(overlay(grad_cam(cat_image,model), cat_image))
 axs_2[1].set_title("Heatmap Image")
 axs_2[1].axis("off")
 
-fig_2.savefig("Images\\heatmap_orig_comparison.png")
+fig_2.savefig(parent_dir / "Image_Visualization" / "heatmap_orig_comparison.png")
 
 plt.show()
 

@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path 
+from utils.parent_dir import parent_dir
 from training.unet_train import train_data
 import torch.utils.data as data
 import torch
@@ -35,8 +36,14 @@ prediction = predicted.detach().cpu().permute(1,2,0)
 ground_truth = label.permute(1,2,0)
 diff = (prediction != ground_truth)
 
+fig.suptitle("Unet Segmentation Visualization Example")
+
 axs[0].imshow(prediction)
+axs[0].set_title("Prediction")
 axs[1].imshow(ground_truth)
+axs[1].set_title("Ground Truth")
 axs[2].imshow(diff)
+axs[2].set_title("Difference")
 
 plt.show()
+fig.savefig(parent_dir / "Image_Visualization" / "unet_seg_masks.png" )
