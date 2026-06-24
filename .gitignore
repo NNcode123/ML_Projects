@@ -8,4 +8,8 @@ checkpoint/cnn
 #Model cache data
 Models/__pycache__/*.pyc
 
+#Import cache data 
+training/__pycache__/
+utils/__pycache__/
+visualization/__pycache__/
 
