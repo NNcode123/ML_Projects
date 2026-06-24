@@ -68,7 +68,7 @@ def main():
 
             try:
                 fl_name = start_epoch - 1
-                checkpoint = torch.load( Path("checkpoint") / "unet" / f"epoch_{start_epoch-1}.pth" )
+                checkpoint = torch.load( Path("checkpoint") / "unet" / f"epoch_{fl_name}.pth" )
 
                 model.load_state_dict(checkpoint["model"])
 
