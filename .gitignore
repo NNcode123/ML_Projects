@@ -2,7 +2,7 @@
 data/
 
 #Model Checkpoints
-checkpoint/cnn
+checkpoint/
 
 
 #Model cache data
