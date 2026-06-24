@@ -10,12 +10,14 @@ from pathlib import Path
 import os 
 import matplotlib.pyplot as plt
 
+# Visualization script for CNN feature maps and Grad-CAM style overlays.
+# Uses a trained CNN model to inspect intermediate feature responses.
 
 model = CNN_CAT_DOG().to(torch.device('cuda'))
 
 model.load_state_dict(torch.load(os.path.join("checkpoint","cnn","model_epoch_9.pth")))
 
-
+# Print a summary placeholder for the model parameter count
 print(f"Total_params:sum(param.numel() for param in model.parameters())")
 
 
@@ -25,6 +27,7 @@ cat_image, dog_image = transform(Image.open(os.path.join("data","PetImages","Cat
 
 
 def feature_map(image: torch.Tensor, model: nn.Module)->torch.Tensor:
+    # Extract feature maps from the first layers of the CNN for visualization
     image = image.unsqueeze(0).to('cuda')
     with torch.no_grad():
         map = image
@@ -35,6 +38,7 @@ def feature_map(image: torch.Tensor, model: nn.Module)->torch.Tensor:
 
 
 def grad_cam(image: torch.Tensor, model: nn.Module)-> torch.Tensor:
+    # Compute a Grad-CAM-like heatmap from the feature gradients
     image = image.unsqueeze(0).to('cuda')
 
     features: torch.Tensor = model.features(image)
@@ -58,11 +62,10 @@ import matplotlib.pyplot as plt
 
 def overlay(heatmap: torch.Tensor, image: torch.Tensor, alpha: float = 0.7):
 
-   
+    # Create a heatmap overlay on top of the original image
     image = image.squeeze().cpu()
     heatmap = heatmap.cpu()
 
-   
     heatmap = heatmap.unsqueeze(0).unsqueeze(0)  # (1,1,h,w)
     heatmap = F.interpolate(heatmap, size=image.shape[1:], mode="bilinear", align_corners=False)
     heatmap = heatmap.squeeze()

@@ -15,6 +15,7 @@ from Models.model import BASIC_MODEL
 def main():
     model = BASIC_MODEL()
 
+    # Load the trained model weights from checkpoint
     model.load_state_dict(torch.load(parent_dir /"checkpoint" / "basic" / "dnn_model.pth"))
 
     model.to(device)
@@ -23,6 +24,7 @@ def main():
 
     transform = transforms.ToTensor()
 
+    # Load the MNIST test split for evaluation
     MNIST_Test = datasets.MNIST(root = "data", train = False, transform = transform )
 
     test_data_loader = DataLoader(dataset = MNIST_Test, batch_size = BATCH//2, shuffle = True, num_workers = 2)
@@ -31,6 +33,7 @@ def main():
 
     model.eval()
 
+    # Run evaluation without gradient tracking for inference
     with torch.no_grad():
 
         loss_num, accuracy = 0, 0

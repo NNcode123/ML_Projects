@@ -42,6 +42,7 @@ target_transform = transforms.Compose([
     transforms.ToTensor()]
 )
 
+# Download and prepare the Oxford-IIIT Pet dataset for segmentation.
 train_data = datasets.OxfordIIITPet(root = "data", target_types = "segmentation", transform = image_transform, target_transform = mask_transform,
                                      download = True )
 
@@ -61,6 +62,7 @@ def main():
 
     def train(BATCH, LR, EPOCH, start_epoch = -1):
 
+        # Initialize U-Net model and optimizer
         model = UNET().to(torch.device('cuda'))
         optimizer = torch.optim.Adam(params =model.parameters(), lr = LR )
 
@@ -70,6 +72,7 @@ def main():
                 fl_name = start_epoch - 1
                 checkpoint = torch.load( Path("checkpoint") / "unet" / f"epoch_{fl_name}.pth" )
 
+                # Resume training from a saved checkpoint if requested
                 model.load_state_dict(checkpoint["model"])
 
                 optimizer.load_state_dict(checkpoint["optim"])
@@ -88,6 +91,7 @@ def main():
 
         epochs = range(start_epoch, EPOCH + start_epoch) if start_epoch != -1 else range(EPOCH)
 
+        # Loop over training epochs and compute per-batch loss/accuracy
         for epoch in epochs:
             tot_loss, tot_acc = 0, 0
 

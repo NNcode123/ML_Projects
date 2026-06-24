@@ -13,7 +13,9 @@ from pathlib import Path
 from Models.model import BASIC_MODEL
 from Models.model import BASIC_CNN
 
-
+# Basic MNIST training script
+# This module defines the training workflow for the BASIC_MODEL and saves
+# checkpoint files for the trained model and optimizer.
 
 def main():
 
@@ -21,6 +23,7 @@ def main():
     
 
 
+    # Select GPU if available, otherwise use CPU
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(device)
 
@@ -34,6 +37,7 @@ def main():
 
     def train_results(BATCH, LR, EPOCHS):
 
+        # Initialize the model, loss function, optimizer, and data transform
         model = BASIC_MODEL().to(torch.device(device))
 
         criterion = nn.CrossEntropyLoss()
@@ -42,7 +46,7 @@ def main():
 
         transform = transforms.ToTensor()
 
-
+        # Load the MNIST training dataset from the local data folder
         MNIST_Train = datasets.MNIST(root = "data", train= True,  transform = transform)
 
         
@@ -61,6 +65,7 @@ def main():
 
         
 
+        # Training loop over epochs and batches
         for epoch in range(EPOCHS):
 
             model.train()
@@ -94,6 +99,7 @@ def main():
             
             print(f"Epoch: {epoch}, Loss: {train_loss/len(train_data_loader):.4f}")
 
+        # Save model and optimizer checkpoints for later evaluation or resuming
         model_path = parent_dir/ "checkpoint" / "basic" /"dnn_model.pth"
 
         optimizer_path = parent_dir /"checkpoint" /"basic"/"dnn_optimizer.pth"
@@ -109,6 +115,7 @@ def main():
 
     
 
+    # Parse command-line arguments for learning rate, batch size, and epochs
     arg_collector = arg.ArgumentParser()
 
     arg_collector.add_argument(  "--lr", type = float)

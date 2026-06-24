@@ -15,7 +15,8 @@ import numpy
 import pandas 
 import torch.optim as optim
 
-
+# CNN training script for cat vs dog classification using a small custom network.
+# This script defines preprocessing, dataset splitting, and the training loop.
 
 transform  = transforms.Compose([
         transforms.Lambda(lambda img: img.convert("RGB")),
@@ -33,6 +34,7 @@ def main():
 
     def train(EPOCH, LR, Batch):
 
+        # Initialize the CNN model and data loader for training
         model = CNN_CAT_DOG().to(device)
 
 
@@ -45,6 +47,7 @@ def main():
         
 
 
+        # Training loop for the cat/dog CNN model
         for epoch in range(EPOCH):
 
             total_loss, total_acc, sample_tot = 0,0, 0
