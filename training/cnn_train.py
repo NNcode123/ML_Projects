@@ -6,13 +6,14 @@ import torch.nn as nn
 from torchvision import datasets, transforms
 from Models.model import CNN_CAT_DOG
 from PIL import Image
+import PIL
 from utils.metrics import calc_accuracy
 from utils.device import device
+from utils.parent_dir import parent_dir
 from pathlib import Path
-import argparse
+
 import os
-import numpy
-import pandas 
+
 import torch.optim as optim
 
 # CNN training script for cat vs dog classification using a small custom network.
@@ -23,6 +24,20 @@ transform  = transforms.Compose([
         transforms.Resize((128,128)),
         transforms.ToTensor()
     ])
+
+
+#check for corrupt images in the data/PetImages directory and remove them accordingly
+for file_name in (parent_dir / "PetImages").rglob("*.jpg"):
+
+    try:
+        image = Image.open(file_name)
+        image.verify()
+    
+    except PIL.UnidentifiedImageError:
+        print(f"{file_name} is corrupted, and will be removed accordingly.")
+        os.remove(file_name)
+
+
 
 train_data = datasets.ImageFolder(root = "data\\PetImages", transform = transform)
 
@@ -54,7 +69,7 @@ def main():
 
             model.train()
             
-            for (image, label) in enumerate(train_loader):
+            for (image, label) in train_loader:
 
                 image, label = image.to(device), label.to(device)
 

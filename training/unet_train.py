@@ -11,9 +11,7 @@ from pathlib import Path
 from utils.metrics import calc_accuracy
 from torchinfo import summary
 
-y = torch.randn(64,3,576,576)
-model = UNET()
-#summary(model, input_size = (1,3,576,576))
+
 
 image_transform = v2.Compose(
     [v2.ToImage(),
@@ -26,13 +24,12 @@ image_transform = v2.Compose(
 mask_transform = v2.Compose( [
     v2.Resize((256,256)),
     v2.ToImage(),
-   # v2.Lambda()
+  
    
 ]
 )
 
 transform = transforms.Compose(
-    #[transforms.Lambda(lambda x: x.convert("RGB")),
     [transforms.Resize((256,256)),
     transforms.ToTensor()]
 )
@@ -95,7 +92,7 @@ def main():
         for epoch in epochs:
             tot_loss, tot_acc = 0, 0
 
-            for ind, (image, mask) in enumerate(train_data_loader):
+            for image, mask in train_data_loader:
                 image,mask = image.to(torch.device('cuda')), mask.to(torch.device('cuda'))
 
                 output = model(image)
