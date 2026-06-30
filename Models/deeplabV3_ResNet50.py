@@ -23,7 +23,7 @@ class rNet_block(nn.Module):
         
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x, y = self.block(x), self.proj(x)
-        print(x.shape, y.shape)
+       ## print(x.shape, y.shape)
         return self.activation(x+y)
     
 
@@ -116,9 +116,12 @@ class DeepLabV3(nn.Module):
         x = self.RNET_Backbone(x)
         x = self.ASPP(x)
 
+        return x
+
          
     
 
+"""
 if __name__ == "__main__":
 
     input = torch.randn(64,3, 256, 256).to('cuda')
@@ -127,6 +130,8 @@ if __name__ == "__main__":
 
     summary(DeepLabV3().to(torch.device('cuda')), input_data = input)
 
+    
+"""
 
 
 

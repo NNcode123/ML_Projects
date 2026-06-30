@@ -24,8 +24,6 @@ checkpoint = torch.load( Path("checkpoint") / "unet" / "epoch_74.pth" )
 
 model.load_state_dict(checkpoint["model"])
 
-
-
 predicted: torch.Tensor = model(image.to(torch.device('cuda')).unsqueeze(0)).cpu().argmax(axis = 1)
 
 print(predicted.shape)

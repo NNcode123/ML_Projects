@@ -9,7 +9,6 @@ from utils.parent_dir import parent_dir
 import os
 from pathlib import Path
 from utils.metrics import calc_accuracy
-from torchinfo import summary
 
 
 
