@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path 
 from utils.parent_dir import parent_dir
 from training.unet_train import train_data
+import utils.metrics as metr
 import torch.utils.data as data
 import torch
 from Models.model import UNET
@@ -24,8 +25,17 @@ checkpoint = torch.load( Path("checkpoint") / "unet" / "epoch_74.pth" )
 
 model.load_state_dict(checkpoint["model"])
 
-predicted: torch.Tensor = model(image.to(torch.device('cuda')).unsqueeze(0)).cpu().argmax(axis = 1)
+output = model(image.to(torch.device('cuda')).unsqueeze(0)).cpu()
 
+predicted =  output.argmax(axis = 1)
+
+
+u = label.clone()
+
+print(f"\n test io score:{metr.iou_score(u, label, 1)} dice score: {metr.dice_score(u, label, 1)} \n\n")
+
+
+print(f"\n iou score:{metr.miou_score(output, label)} dice score: {metr.mdice_score(output, label)}")
 print(predicted.shape)
 
 fig, axs = plt.subplots(nrows = 1, ncols = 3, figsize = (20,7))
@@ -43,5 +53,6 @@ axs[1].set_title("Ground Truth")
 axs[2].imshow(diff)
 axs[2].set_title("Difference")
 
-plt.show()
-fig.savefig(parent_dir / "Image_Visualization" / "unet_seg_masks.png" )
+#plt.show()
+
+#fig.savefig(parent_dir / "Image_Visualization" / "unet_seg_masks.png" )
