@@ -35,6 +35,10 @@ flowchart TD
 Reference:
 - Ronneberger, O., Fischer, P., and Brox, T. "U-Net: Convolutional Networks for Biomedical Image Segmentation."
 
+U-Net architecture image:
+
+![U-Net architecture](Architecture_Images/u-net-architecture.png)
+
 ## DeepLabV3 Architecture
 
 The DeepLabV3 implementation uses atrous (dilated) convolutions and an Atrous Spatial Pyramid Pooling (ASPP) module to capture multi-scale context without reducing spatial resolution. This makes it well suited for semantic segmentation tasks where both local detail and global context matter.
@@ -55,6 +59,15 @@ flowchart LR
 
 Reference:
 - Chen, L.-C., Papandreou, G., Schroff, F., and Adam, H. "Rethinking Atrous Convolution for Semantic Image Segmentation" (the canonical DeepLabV3 paper).
+
+DeepLabV3 architecture image:
+
+![DeepLabV3 architecture](Architecture_Images/DeepLabV3_Architecture.png)
+
+
+
+
+
 
 ## ResNet50 Backbone
 
@@ -117,4 +130,7 @@ Use these commands to run visualization scripts.
   - `python -m visualization.visualization`
 - Visualize U-Net segmentation results:
   - `python -m visualization.unet_seg_visualization`
+
+  
+
 
