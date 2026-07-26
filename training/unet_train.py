@@ -11,7 +11,6 @@ from utils.parent_dir import parent_dir
 from utils.device import device
 import os
 from pathlib import Path
-from utils.metrics import calc_accuracy
 
 
 

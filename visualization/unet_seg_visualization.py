@@ -25,9 +25,10 @@ checkpoint = torch.load( Path("checkpoint") / "unet" / "epoch_74.pth" )
 
 model.load_state_dict(checkpoint["model"])
 
-output = model(image.to(torch.device('cuda')).unsqueeze(0)).cpu()
+unet_output = model(image.to(torch.device('cuda')).unsqueeze(0)).cpu()
 
-predicted =  output.argmax(axis = 1)
+predicted =  unet_output.argmax(axis = 1)
+print(f"{predicted.shape}")
 
 
 u = label.clone()
@@ -35,7 +36,7 @@ u = label.clone()
 print(f"\n test io score:{metr.iou_score(u, label, 1)} dice score: {metr.dice_score(u, label, 1)} \n\n")
 
 
-print(f"\n iou score:{metr.miou_score(output, label)} dice score: {metr.mdice_score(output, label)}")
+print(f"\n iou score:{metr.miou_score(unet_output, label)} dice score: {metr.mdice_score(unet_output, label)}")
 print(predicted.shape)
 
 fig, axs = plt.subplots(nrows = 1, ncols = 3, figsize = (20,7))
@@ -53,6 +54,9 @@ axs[1].set_title("Ground Truth")
 axs[2].imshow(diff)
 axs[2].set_title("Difference")
 
-#plt.show()
+plt.show()
 
-#fig.savefig(parent_dir / "Image_Visualization" / "unet_seg_masks.png" )
+image_dir = parent_dir/"Image_Visualization"/"unet_seg_mask.png"
+image_dir.touch(exist_ok = True)
+
+plt.savefig(image_dir )

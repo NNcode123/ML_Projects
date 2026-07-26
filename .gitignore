@@ -5,6 +5,10 @@ data/
 checkpoint/
 
 
+#Images
+Image_Visualization/*.png
+
+
 #Model cache data
 Models/__pycache__/*.pyc
 
@@ -13,3 +17,5 @@ training/__pycache__/
 utils/__pycache__/
 visualization/__pycache__/
 
+
+__pycahce__

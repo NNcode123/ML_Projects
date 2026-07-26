@@ -24,13 +24,6 @@ def dice_score(logits:torch.Tensor, ground_truth: torch.Tensor, seg_class: int )
     return (2*intersection.sum().item())/(pred_seg_class.sum().item()+ground_seg_class.sum().item())
     
 
-
-
-
-
-
-        
-
     
 
 def iou_score(logits:torch.Tensor, ground_truth: torch.Tensor, seg_class: int)->float:

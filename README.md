@@ -10,7 +10,7 @@ This repository contains implementations of several segmentation architectures f
 
 ## U-Net Architecture
 
-The U-Net implementation follows the standard encoder-decoder structure with skip connections between matching stages. In this repository, the feature-channel count was scaled by a factor of four at each layer, which substantially increases model capacity compared to a baseline U-Net configuration. In effect, this makes the feature representation roughly 16x larger at the corresponding layers than the standard setup.
+The U-Net implementation follows the standard encoder-decoder structure with skip connections between matching stages. In this repository, the feature-channel count was scaled down by a factor of four at each layer to help reduce VRAM usage and keep training feasible on the available hardware. Despite this more memory-efficient configuration, the model still performed exceptionally well after 74 iterations.
 
 Key characteristics:
 - Encoder path with repeated convolution blocks and downsampling
