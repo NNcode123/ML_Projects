@@ -10,8 +10,8 @@ import PIL
 from utils.metrics import calc_accuracy
 from utils.device import device
 from utils.parent_dir import parent_dir
-from utils.train_funcs import train_results
-from pathlib import Path
+from utils.parser import Parser
+from utils.train_funcs import get_training_info, train_results, optimizer_map, criterion_map
 
 import os
 
@@ -48,7 +48,25 @@ train_data, val_data = data.random_split(train_data, [int(len(train_data)*0.8), 
 
 def main():
 
-    train_results(64,0.001,10, CNN_CAT_DOG(), train_data, None, parent_dir / "checkpoint" / "cnn" / "saved_cnn_model.pth")
+    config = get_training_info("CNN_CAT_DOG")
+    parser = Parser(
+        lr=config["optimizer"]["params"]["lr"],
+        batch_size=config["training"]["batch_size"],
+        epochs=config["training"]["epochs"],
+    )
+    args = parser.parse_args()
+
+    model = CNN_CAT_DOG()
+    optimizer_name = config["optimizer"]["type"]
+    criterion_name = config["loss"]["type"]
+
+    optimizer_cls = optimizer_map()[optimizer_name]
+    criterion_cls = criterion_map()[criterion_name]
+
+    optimizer = optimizer_cls(model.parameters(), lr=args.lr)
+    criterion = criterion_cls()
+
+    train_results(args.batch_size, args.lr, args.epochs, model, optimizer, criterion, train_data, None, parent_dir / "checkpoint" / "cnn" / "saved_cnn_model.pth")
 
     
 

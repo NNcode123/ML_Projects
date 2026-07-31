@@ -6,11 +6,11 @@ from PIL import Image
 from torchvision import datasets, transforms
 from torchvision.transforms import v2
 from torch.utils.data import DataLoader
-from utils.train_funcs import train_seg_model
+from utils.train_funcs import get_training_info, train_seg_model, optimizer_map, criterion_map
 from utils.parent_dir import parent_dir
 from utils.device import device
+from utils.parser import Parser
 import os
-from pathlib import Path
 
 
 
@@ -55,10 +55,26 @@ test_data = datasets.OxfordIIITPet(root = "data", split = "test", target_types =
 
 
 def main():
+    config = get_training_info("unet")
+    parser = Parser(
+        lr=config["optimizer"]["params"]["lr"],
+        batch_size=config["training"]["batch_size"],
+        epochs=config["training"]["epochs"],
+        start_epoch=config["training"]["start_epoch"],
+    )
+    args = parser.parse_args()
+
     model = UNET()
-    optimizer = optim.Adam(params = model.parameters(), lr = 0.99)
-    train_seg_model(model = model, train_dataset = train_data, optimizer = optimizer, criterion = nn.CrossEntropyLoss(), batch_size = 64, epochs = 3, 
-                    checkpoint_dir = parent_dir/"checkpoint"/"unet", device = device, start_epoch = 1 )
+    optimizer_name = config["optimizer"]["type"]
+    criterion_name = config["loss"]["type"]
+
+    optimizer_cls = optimizer_map()[optimizer_name]
+    criterion_cls = criterion_map()[criterion_name]
+
+    optimizer = optimizer_cls(model.parameters(), lr=args.lr)
+    criterion = criterion_cls()
+    train_seg_model(model = model, train_dataset = train_data, optimizer = optimizer, criterion = criterion, batch_size = args.batch_size, epochs = args.epochs, 
+                    checkpoint_dir = parent_dir/"checkpoint"/"unet", device = device, start_epoch = args.start_epoch )
 
 
 if __name__ == "__main__":

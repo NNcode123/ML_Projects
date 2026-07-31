@@ -92,6 +92,18 @@ Examples of added functionality include:
 - Supporting functions for dataset handling and model preparation
 - Additional utilities that improve the end-to-end workflow for U-Net and DeepLabV3 experiments
 
+## Build configs for the training scripts
+
+Training defaults now come from [utils/hyperparameters.yml](utils/hyperparameters.yml) instead of being hard-coded inside each training script. Each training entry point reads its config from that YAML file and exposes the same hyperparameters as CLI flags, so you can override them at runtime without editing code.
+
+Example:
+- `python -m training.basic_train --epochs 3`
+- `python -m training.cnn_train --batch-size 32 --lr 0.0005`
+- `python -m training.unet_train --epochs 2 --start-epoch 1`
+- `python -m training.deeplabV3_train --batch-size 2 --lr 0.001`
+
+If you want to change the defaults permanently, update [utils/hyperparameters.yml](utils/hyperparameters.yml) and the scripts will pick up the new values automatically.
+
 ## Training Pipelines
 
 Use the following commands to run the training and evaluation pipelines.
@@ -100,9 +112,9 @@ Use the following commands to run the training and evaluation pipelines.
   - `python -m training.basic_evaluate`
 - Run CNN model evaluation:
   - `python -m training.cnn_evaluate`
-- Train the basic DNN model:
+- Run basic training:
   - `python -m training.basic_train`
-- Train the CNN model:
+- Run CNN training:
   - `python -m training.cnn_train`
 - Train the U-Net segmentation model:
   - `python -m training.unet_train`
@@ -130,7 +142,9 @@ Use these commands to run visualization scripts.
   - `python -m visualization.visualization`
 - Visualize U-Net segmentation results:
   - `python -m visualization.unet_seg_visualization`
+- Compare U-Net and DeepLabV3 segmentation outputs for three images:
+  - `python -m visualization.segment_seg_visualization`
 
-  
+This script is intended for side-by-side comparison of segmentation results from the U-Net and DeepLabV3 models on a small set of sample images, making it easier to inspect differences in predictions visually.
 
 

@@ -83,5 +83,4 @@ plt.show()
 image_dir = parent_dir/"Image_Visualization"/"unet_DeeplabV3_seg_comparison_mask.png"
 image_dir.touch(exist_ok = True)
 
-
 plt.savefig(image_dir)

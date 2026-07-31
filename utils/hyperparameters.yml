@@ -1,0 +1,57 @@
+unet:
+  optimizer:
+    type: Adam
+    params:
+      lr: 0.001
+
+  training:
+    batch_size: 64
+    epochs: 13
+    start_epoch: 1
+
+  loss:
+    type: CrossEntropyLoss
+
+
+deeplabv3:
+  optimizer: 
+    type: SGD
+    params:
+      lr: 0.007
+      momentum: 0.9
+      weight_decay: 0.0001
+
+  training:
+    batch_size: 4
+    epochs: 74
+    start_epoch: 1
+
+  loss:
+    type: CrossEntropyLoss
+
+
+CNN_CAT_DOG:
+  optimizer:
+    type: Adam
+    params:
+      lr: 0.001
+
+  training: 
+    batch_size: 64
+    epochs: 10
+  
+  loss:
+    type: CrossEntropyLoss
+    
+BASIC:
+  optimizer:
+    type: Adam
+    params:
+      lr: 0.001
+
+  training:
+    batch_size: 64
+    epochs: 10
+
+  loss:
+    type: CrossEntropyLoss

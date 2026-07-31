@@ -5,8 +5,7 @@ data/
 checkpoint/
 
 
-#Images
-Image_Visualization/*.png
+
 
 
 #Model cache data

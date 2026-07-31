@@ -3,6 +3,7 @@ import torch.nn as nn
 from torch import optim
 import torch
 import torchvision
+import yaml
 from torch.utils.data import DataLoader
 from pathlib import Path 
 from utils.metrics import calc_accuracy 
@@ -10,14 +11,12 @@ from utils.metrics import miou_score, mdice_score
 from utils.parent_dir import parent_dir
 from utils.device import device
 
-def train_results(BATCH: int, LR: float, EPOCHS:int , model: nn.Module, dataset: torchvision.datasets, batch_prep_func, save_path: Path):
+def train_results(BATCH: int, LR: float, EPOCHS:int , model: nn.Module, optimizer: torch.optim, criterion,  dataset: torchvision.datasets, batch_prep_func, save_path: Path):
 
         # Initialize the model, loss function, optimizer, and data transform
         model = model.to(device)
 
         criterion = nn.CrossEntropyLoss()
-
-        optimizer = torch.optim.Adam(model.parameters(), lr = LR)
 
         # Load the MNIST training dataset from the local data folder
 
@@ -181,5 +180,31 @@ def train_seg_model(
         print(f"Epoch {epoch:03d} | Loss: {avg_loss:.4f} | Accuracy: {avg_acc:.4f} | IOU: {avg_mIOU:.4f} | DICE: {avg_dice:.4f}")
         
 
-        
-        
+def get_training_info(model_name:str):
+    with open(parent_dir/"utils"/"hyperparameters.yml","r") as file:
+        model_info  = yaml.safe_load(file)
+    return model_info[model_name]
+
+
+def optimizer_map():
+    return {
+        "SGD": optim.SGD,
+        "Adam": optim.Adam,
+        "AdamW": optim.AdamW,
+        "RMSprop": optim.RMSprop,
+        "Adagrad": optim.Adagrad,
+        "Adadelta": optim.Adadelta,
+    }
+
+def criterion_map():
+    return {
+        "CrossEntropyLoss": nn.CrossEntropyLoss,
+        "MSELoss": nn.MSELoss,
+        "L1Loss": nn.L1Loss,
+        "SmoothL1Loss": nn.SmoothL1Loss,
+        "BCELoss": nn.BCELoss,
+        "BCEWithLogitsLoss": nn.BCEWithLogitsLoss,
+        "NLLLoss": nn.NLLLoss,
+    }
+
+
